@@ -1,0 +1,76 @@
+Configuration,Configuration Label,Model,Fold,Real Training Rows,Synthetic Training Rows,Validation Real Rows,Validation Synthetic Rows,Accuracy,Precision,Recall,F1
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Logistic Regression,1,70,500,18,0,0.7222222222222222,0.75,0.6666666666666666,0.7058823529411765
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Logistic Regression,2,70,500,18,0,0.7222222222222222,0.7,0.7777777777777778,0.7368421052631579
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Logistic Regression,3,70,500,18,0,0.6666666666666666,0.6153846153846154,0.8888888888888888,0.7272727272727273
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Logistic Regression,4,71,500,17,0,0.8235294117647058,0.8571428571428571,0.75,0.8
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Logistic Regression,5,71,500,17,0,0.6470588235294118,0.6,0.75,0.6666666666666666
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,KNN,1,70,500,18,0,0.6111111111111112,0.75,0.3333333333333333,0.46153846153846156
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,KNN,2,70,500,18,0,0.7222222222222222,0.7,0.7777777777777778,0.7368421052631579
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,KNN,3,70,500,18,0,0.6666666666666666,0.6153846153846154,0.8888888888888888,0.7272727272727273
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,KNN,4,71,500,17,0,0.6470588235294118,0.625,0.625,0.625
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,KNN,5,71,500,17,0,0.7647058823529411,0.7,0.875,0.7777777777777778
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Decision Tree,1,70,500,18,0,0.6111111111111112,0.75,0.3333333333333333,0.46153846153846156
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Decision Tree,2,70,500,18,0,0.7777777777777778,0.8571428571428571,0.6666666666666666,0.75
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Decision Tree,3,70,500,18,0,0.7777777777777778,0.7777777777777778,0.7777777777777778,0.7777777777777778
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Decision Tree,4,71,500,17,0,0.5882352941176471,0.5714285714285714,0.5,0.5333333333333333
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Decision Tree,5,71,500,17,0,0.7058823529411765,0.7142857142857143,0.625,0.6666666666666666
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Random Forest,1,70,500,18,0,0.6111111111111112,0.75,0.3333333333333333,0.46153846153846156
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Random Forest,2,70,500,18,0,0.7777777777777778,0.7777777777777778,0.7777777777777778,0.7777777777777778
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Random Forest,3,70,500,18,0,0.7777777777777778,0.7272727272727273,0.8888888888888888,0.8
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Random Forest,4,71,500,17,0,0.5882352941176471,0.5555555555555556,0.625,0.5882352941176471
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,Random Forest,5,71,500,17,0,0.7058823529411765,0.6666666666666666,0.75,0.7058823529411765
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,SVM,1,70,500,18,0,0.5555555555555556,0.6666666666666666,0.2222222222222222,0.3333333333333333
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,SVM,2,70,500,18,0,0.7222222222222222,0.75,0.6666666666666666,0.7058823529411765
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,SVM,3,70,500,18,0,0.7222222222222222,0.7,0.7777777777777778,0.7368421052631579
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,SVM,4,71,500,17,0,0.7058823529411765,0.7142857142857143,0.625,0.6666666666666666
+vas_categorical_baseline,4-feature baseline; VAS categorical in SMOTENC,SVM,5,71,500,17,0,0.6470588235294118,0.625,0.625,0.625
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Logistic Regression,1,70,500,18,0,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Logistic Regression,2,70,500,18,0,0.6666666666666666,0.6363636363636364,0.7777777777777778,0.7
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Logistic Regression,3,70,500,18,0,0.6111111111111112,0.5833333333333334,0.7777777777777778,0.6666666666666666
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Logistic Regression,4,71,500,17,0,0.8235294117647058,0.8571428571428571,0.75,0.8
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Logistic Regression,5,71,500,17,0,0.6470588235294118,0.6,0.75,0.6666666666666666
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,KNN,1,70,500,18,0,0.5,0.5,0.2222222222222222,0.3076923076923077
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,KNN,2,70,500,18,0,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,KNN,3,70,500,18,0,0.6666666666666666,0.6153846153846154,0.8888888888888888,0.7272727272727273
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,KNN,4,71,500,17,0,0.5294117647058824,0.5,0.5,0.5
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,KNN,5,71,500,17,0,0.5882352941176471,0.5454545454545454,0.75,0.631578947368421
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Decision Tree,1,70,500,18,0,0.4444444444444444,0.42857142857142855,0.3333333333333333,0.375
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Decision Tree,2,70,500,18,0,0.7777777777777778,0.7272727272727273,0.8888888888888888,0.8
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Decision Tree,3,70,500,18,0,0.6111111111111112,0.6,0.6666666666666666,0.631578947368421
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Decision Tree,4,71,500,17,0,0.6470588235294118,0.625,0.625,0.625
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Decision Tree,5,71,500,17,0,0.8235294117647058,0.8571428571428571,0.75,0.8
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Random Forest,1,70,500,18,0,0.4444444444444444,0.42857142857142855,0.3333333333333333,0.375
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Random Forest,2,70,500,18,0,0.7777777777777778,0.7272727272727273,0.8888888888888888,0.8
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Random Forest,3,70,500,18,0,0.7222222222222222,0.7,0.7777777777777778,0.7368421052631579
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Random Forest,4,71,500,17,0,0.5294117647058824,0.5,0.625,0.5555555555555556
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,Random Forest,5,71,500,17,0,0.7058823529411765,0.6363636363636364,0.875,0.7368421052631579
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,SVM,1,70,500,18,0,0.5,0.5,0.3333333333333333,0.4
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,SVM,2,70,500,18,0,0.7222222222222222,0.7,0.7777777777777778,0.7368421052631579
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,SVM,3,70,500,18,0,0.6111111111111112,0.6,0.6666666666666666,0.631578947368421
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,SVM,4,71,500,17,0,0.5882352941176471,0.5714285714285714,0.5,0.5333333333333333
+vas_numeric_baseline,4-feature baseline; VAS numeric in SMOTENC,SVM,5,71,500,17,0,0.6470588235294118,0.6,0.75,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Logistic Regression,1,70,500,18,0,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Logistic Regression,2,70,500,18,0,0.6666666666666666,0.6363636363636364,0.7777777777777778,0.7
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Logistic Regression,3,70,500,18,0,0.6111111111111112,0.5833333333333334,0.7777777777777778,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Logistic Regression,4,71,500,17,0,0.8235294117647058,0.8571428571428571,0.75,0.8
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Logistic Regression,5,71,500,17,0,0.5882352941176471,0.5714285714285714,0.5,0.5333333333333333
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,KNN,1,70,500,18,0,0.7222222222222222,0.8333333333333334,0.5555555555555556,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,KNN,2,70,500,18,0,0.6666666666666666,0.7142857142857143,0.5555555555555556,0.625
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,KNN,3,70,500,18,0,0.6666666666666666,0.6153846153846154,0.8888888888888888,0.7272727272727273
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,KNN,4,71,500,17,0,0.7058823529411765,0.6666666666666666,0.75,0.7058823529411765
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,KNN,5,71,500,17,0,0.6470588235294118,0.6,0.75,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Decision Tree,1,70,500,18,0,0.5,0.5,0.2222222222222222,0.3076923076923077
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Decision Tree,2,70,500,18,0,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Decision Tree,3,70,500,18,0,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Decision Tree,4,71,500,17,0,0.5882352941176471,0.5714285714285714,0.5,0.5333333333333333
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Decision Tree,5,71,500,17,0,0.5882352941176471,0.5454545454545454,0.75,0.631578947368421
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Random Forest,1,70,500,18,0,0.7777777777777778,1.0,0.5555555555555556,0.7142857142857143
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Random Forest,2,70,500,18,0,0.7222222222222222,0.6666666666666666,0.8888888888888888,0.7619047619047619
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Random Forest,3,70,500,18,0,0.7777777777777778,0.7272727272727273,0.8888888888888888,0.8
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Random Forest,4,71,500,17,0,0.7058823529411765,0.7142857142857143,0.625,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,Random Forest,5,71,500,17,0,0.6470588235294118,0.625,0.625,0.625
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,SVM,1,70,500,18,0,0.7222222222222222,0.8333333333333334,0.5555555555555556,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,SVM,2,70,500,18,0,0.6666666666666666,0.7142857142857143,0.5555555555555556,0.625
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,SVM,3,70,500,18,0,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,SVM,4,71,500,17,0,0.7058823529411765,0.7142857142857143,0.625,0.6666666666666666
+womac_candidate,5-feature WOMAC candidate; VAS categorical in SMOTENC,SVM,5,71,500,17,0,0.8235294117647058,0.8571428571428571,0.75,0.8

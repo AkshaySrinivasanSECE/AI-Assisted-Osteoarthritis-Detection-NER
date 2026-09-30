@@ -1,0 +1,16 @@
+Configuration,Model,True Negative,False Positive,False Negative,True Positive,OOF Subjects
+vas_categorical_baseline,Logistic Regression,30,15,10,33,88
+vas_categorical_baseline,KNN,30,15,13,30,88
+vas_categorical_baseline,Decision Tree,36,9,18,25,88
+vas_categorical_baseline,Random Forest,32,13,14,29,88
+vas_categorical_baseline,SVM,34,11,18,25,88
+vas_numeric_baseline,Logistic Regression,28,17,11,32,88
+vas_numeric_baseline,KNN,26,19,17,26,88
+vas_numeric_baseline,Decision Tree,30,15,15,28,88
+vas_numeric_baseline,Random Forest,26,19,13,30,88
+vas_numeric_baseline,SVM,28,17,17,26,88
+womac_candidate,Logistic Regression,29,16,13,30,88
+womac_candidate,KNN,30,15,13,30,88
+womac_candidate,Decision Tree,29,16,19,24,88
+womac_candidate,Random Forest,33,12,12,31,88
+womac_candidate,SVM,36,9,16,27,88

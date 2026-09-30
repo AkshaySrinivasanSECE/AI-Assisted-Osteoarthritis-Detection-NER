@@ -1,0 +1,355 @@
+{
+  "artifacts": {
+    "calibration_comparison": {
+      "path": "docs/results/calibration_comparison.csv",
+      "sha256": "381266f04b7f11f60c0f93851b32599eda5460ef1e1f7520f14e4e048cdf8266"
+    },
+    "calibration_fold_metrics": {
+      "path": "docs/results/calibration_fold_metrics.csv",
+      "sha256": "efb3003fa980a3b032c3ecaabdfdaf3f823d23d67fda51df6303f724dceaea71"
+    },
+    "class_distribution_plot": {
+      "path": "docs/results/class_distribution.png",
+      "sha256": "d30940f4343df528c41d5391f305c7edb7647733300c445c945eced99b72d379"
+    },
+    "confusion_matrix_plot": {
+      "path": "docs/results/confusion_matrix.png",
+      "sha256": "9be1a32817cebb77de002b1836303c6224d6fe0275c47fa6060105dcd501db6d"
+    },
+    "confusion_matrix_table": {
+      "path": "docs/results/confusion_matrix.csv",
+      "sha256": "2f5cf321f0f0b7927dfed989a7b8a96bbc13604f6b3d180ea54e3d7de430710e"
+    },
+    "feature_importance": {
+      "path": "docs/results/feature_importance.csv",
+      "sha256": "53cc18a964e9420a126f68b5aeba1325d8da53a0e632ab41b0f250af125bf48d"
+    },
+    "feature_importance_folds": {
+      "path": "docs/results/feature_importance_folds.csv",
+      "sha256": "b86bec5b95580ced7b3cced9e73bfa7f18c106e1f8d6158d3db65802ed1a6502"
+    },
+    "feature_importance_plot": {
+      "path": "docs/results/feature_importance.png",
+      "sha256": "a897b6e820063be30d7aa4b7c218a4eca402fd766b6fd2397292e1b068c2f96a"
+    },
+    "feature_order": {
+      "path": "models/features.pkl",
+      "sha256": "138d077d22ce602c55d6bf953287b2836220d670f0ec84bb46e277db332d2b08"
+    },
+    "model_comparison": {
+      "path": "docs/results/model_comparison.csv",
+      "sha256": "815d08ae86b1de249c0895f9a34beed16dec78251805b04f25484c6057877ad9"
+    },
+    "model_comparison_plot": {
+      "path": "docs/results/model_comparison.png",
+      "sha256": "f53fd7a371cdbf19a0c2755f6e22774544e906f7a4a70bdb353b81a32ea6b694"
+    },
+    "per_fold_metrics": {
+      "path": "docs/results/model_fold_metrics.csv",
+      "sha256": "639b3c7a131e3a27060678cceb0c4a0061c71bcf2bc613e042bf583c408cf49d"
+    },
+    "probability_calibration_plot": {
+      "path": "docs/results/probability_calibration.png",
+      "sha256": "fa4af835c8136c695e53ac2e0c6eb0793db3d3c461ed5248207e62fcb4d09c30"
+    },
+    "selected_model": {
+      "path": "models/oa_model.pkl",
+      "sha256": "7228bb1d7b0b1195533edb2d3252745963b7e0f95f908f23b6de050f06b24226"
+    },
+    "selected_model_oof_predictions": {
+      "path": "docs/results/selected_model_oof_predictions.csv",
+      "sha256": "0ce831f7e2183235bb296ed93750c148855ebac63533827f11b71a3545bec6f6"
+    },
+    "validation_fold_assignments": {
+      "path": "docs/results/validation_fold_assignments.csv",
+      "sha256": "06209fb99229e91e95943c94234a975d29cd1828a41cab4bb476e1c58f05b246"
+    }
+  },
+  "candidate_models": {
+    "Decision Tree": {
+      "estimator_class": "DecisionTreeClassifier",
+      "parameters": {
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": 4,
+        "max_features": null,
+        "max_leaf_nodes": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "random_state": 42,
+        "splitter": "best"
+      }
+    },
+    "KNN": {
+      "estimator_class": "Pipeline",
+      "parameters": {
+        "memory": null,
+        "model": "KNeighborsClassifier()",
+        "model__algorithm": "auto",
+        "model__leaf_size": 30,
+        "model__metric": "minkowski",
+        "model__metric_params": null,
+        "model__n_jobs": null,
+        "model__n_neighbors": 5,
+        "model__p": 2,
+        "model__weights": "uniform",
+        "scaler": "StandardScaler()",
+        "scaler__copy": true,
+        "scaler__with_mean": true,
+        "scaler__with_std": true,
+        "steps": [
+          [
+            "scaler",
+            "StandardScaler()"
+          ],
+          [
+            "model",
+            "KNeighborsClassifier()"
+          ]
+        ],
+        "transform_input": null,
+        "verbose": false
+      }
+    },
+    "Logistic Regression": {
+      "estimator_class": "Pipeline",
+      "parameters": {
+        "memory": null,
+        "model": "LogisticRegression(max_iter=1000, random_state=42)",
+        "model__C": 1.0,
+        "model__class_weight": null,
+        "model__dual": false,
+        "model__fit_intercept": true,
+        "model__intercept_scaling": 1,
+        "model__l1_ratio": 0.0,
+        "model__max_iter": 1000,
+        "model__n_jobs": null,
+        "model__penalty": "deprecated",
+        "model__random_state": 42,
+        "model__solver": "lbfgs",
+        "model__tol": 0.0001,
+        "model__verbose": 0,
+        "model__warm_start": false,
+        "scaler": "StandardScaler()",
+        "scaler__copy": true,
+        "scaler__with_mean": true,
+        "scaler__with_std": true,
+        "steps": [
+          [
+            "scaler",
+            "StandardScaler()"
+          ],
+          [
+            "model",
+            "LogisticRegression(max_iter=1000, random_state=42)"
+          ]
+        ],
+        "transform_input": null,
+        "verbose": false
+      }
+    },
+    "Random Forest": {
+      "estimator_class": "RandomForestClassifier",
+      "parameters": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": 5,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 200,
+        "n_jobs": null,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      }
+    },
+    "SVM": {
+      "estimator_class": "Pipeline",
+      "parameters": {
+        "memory": null,
+        "model": "SVC(probability=True, random_state=42)",
+        "model__C": 1.0,
+        "model__break_ties": false,
+        "model__cache_size": 200,
+        "model__class_weight": null,
+        "model__coef0": 0.0,
+        "model__decision_function_shape": "ovr",
+        "model__degree": 3,
+        "model__gamma": "scale",
+        "model__kernel": "rbf",
+        "model__max_iter": -1,
+        "model__probability": true,
+        "model__random_state": 42,
+        "model__shrinking": true,
+        "model__tol": 0.001,
+        "model__verbose": false,
+        "scaler": "StandardScaler()",
+        "scaler__copy": true,
+        "scaler__with_mean": true,
+        "scaler__with_std": true,
+        "steps": [
+          [
+            "scaler",
+            "StandardScaler()"
+          ],
+          [
+            "model",
+            "SVC(probability=True, random_state=42)"
+          ]
+        ],
+        "transform_input": null,
+        "verbose": false
+      }
+    }
+  },
+  "cross_validation": {
+    "method": "StratifiedKFold",
+    "metric_standard_deviation": "sample standard deviation across five folds (ddof=1)",
+    "n_splits": 5,
+    "outer_validation_subjects": "original real subjects only",
+    "outer_validation_synthetic_rows": 0,
+    "random_seed": 42,
+    "shuffle": true,
+    "synthetic_augmentation": "Within each outer fold, SMOTENC is fitted only on that fold's original training subjects and adds 250 training examples per target class."
+  },
+  "data": {
+    "active_dataset_sha256": "e7bd3eee8a4ba3ece001a504cb96684ab0b102cf17e808f431ffc70c05d86b39",
+    "active_training_rows": 588,
+    "original_dataset_sha256": "75bd6e52bf3950c8319efa20a72affbfe381685944f092530e10644e6813ca27",
+    "original_observed_subjects": 88,
+    "original_target_counts": {
+      "0": 45,
+      "1": 43
+    },
+    "synthetic_target_counts": {
+      "0": 250,
+      "1": 250
+    },
+    "synthetic_training_examples": 500
+  },
+  "evidence_statement": "The reported validation metrics are internal cross-validation results from 88 observed subjects. The 500 SMOTENC rows are synthetic training examples, never independent validation subjects, and do not constitute additional clinical evidence. No external clinical validation has been performed.",
+  "feature_configuration": {
+    "features": [
+      "age",
+      "gender",
+      "BMI",
+      "VAS score"
+    ],
+    "name": "vas_categorical_baseline",
+    "smotenc_categorical_features": [
+      "gender",
+      "VAS score"
+    ],
+    "vas_representation": "Categorical for SMOTENC sampling; integer-valued numeric input to estimators.",
+    "womac_included": false
+  },
+  "features": [
+    "age",
+    "gender",
+    "BMI",
+    "VAS score"
+  ],
+  "final_training": {
+    "model_variant": "uncalibrated",
+    "note": "The final estimator is fitted on the active dataset after model selection. Synthetic rows remain training examples rather than independent evidence.",
+    "real_training_rows": 88,
+    "synthetic_training_rows": 500,
+    "total_training_rows": 588
+  },
+  "model_selection": {
+    "criterion": "highest mean F1 across the five outer real-subject validation folds",
+    "selected_f1_standard_deviation": 0.04876334141493302,
+    "selected_mean_f1": 0.7273327704287456,
+    "selected_model": "Logistic Regression"
+  },
+  "permutation_importance": {
+    "evaluated_on": "each outer fold's untouched original real validation subjects",
+    "repeats_per_fold": 30,
+    "scoring": "F1",
+    "synthetic_validation_rows": 0
+  },
+  "probability_calibration": {
+    "adoption_rule": "Apply only if real-subject out-of-fold Brier score and log loss both improve without reducing out-of-fold F1.",
+    "applied_to_saved_model": false,
+    "calibration_fraction_of_each_outer_training_partition": 0.2,
+    "calibration_rows": "original real subjects drawn only from the outer training partition",
+    "calibration_synthetic_rows": 0,
+    "comparison": [
+      {
+        "Accuracy Mean": 0.7163398692810458,
+        "Accuracy Std": 0.06860410433879788,
+        "Brier Score Mean": 0.20935549833168485,
+        "Brier Score Std": 0.03611381101428281,
+        "F1 Mean": 0.7273327704287456,
+        "F1 Std": 0.04876334141493302,
+        "Log Loss Mean": 0.6500533995717733,
+        "Log Loss Std": 0.10491540367731025,
+        "OOF Accuracy": 0.7159090909090909,
+        "OOF Brier Score": 0.20919829293350964,
+        "OOF F1": 0.7252747252747253,
+        "OOF Log Loss": 0.6490567526676417,
+        "OOF Precision": 0.6875,
+        "OOF Recall": 0.7674418604651163,
+        "Precision Mean": 0.7045054945054945,
+        "Precision Std": 0.10518096721951962,
+        "Recall Mean": 0.7666666666666666,
+        "Recall Std": 0.08002700161604406,
+        "Variant": "Uncalibrated"
+      },
+      {
+        "Accuracy Mean": 0.681045751633987,
+        "Accuracy Std": 0.0566312619795587,
+        "Brier Score Mean": 0.20446603532479415,
+        "Brier Score Std": 0.014630628714074556,
+        "F1 Mean": 0.6516218147177899,
+        "F1 Std": 0.08021588206652923,
+        "Log Loss Mean": 0.6003862764496051,
+        "Log Loss Std": 0.03440684318105156,
+        "OOF Accuracy": 0.6818181818181818,
+        "OOF Brier Score": 0.2045324570923108,
+        "OOF F1": 0.6585365853658537,
+        "OOF Log Loss": 0.6003335968437822,
+        "OOF Precision": 0.6923076923076923,
+        "OOF Recall": 0.627906976744186,
+        "Precision Mean": 0.6976190476190475,
+        "Precision Std": 0.08676603408708859,
+        "Recall Mean": 0.6222222222222222,
+        "Recall Std": 0.12044157438154889,
+        "Variant": "Calibrated"
+      }
+    ],
+    "method_evaluated": "sigmoid",
+    "outer_evaluation_rows": "untouched original real subjects",
+    "selected_variant": "Uncalibrated"
+  },
+  "random_seed": 42,
+  "schema_version": 1,
+  "software_versions": {
+    "imbalanced_learn": "0.14.2",
+    "joblib": "1.6.0",
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "python": "3.12.10",
+    "scikit_learn": "1.9.1"
+  },
+  "target": {
+    "column": "group",
+    "labels": {
+      "0": "healthy",
+      "1": "knee osteoarthritis"
+    }
+  }
+}

@@ -1,0 +1,583 @@
+{
+  "counts": {
+    "active_by_target": {
+      "0": 295,
+      "1": 293
+    },
+    "by_record_source": {
+      "real": 88,
+      "synthetic": 500
+    },
+    "real_by_target": {
+      "0": 45,
+      "1": 43
+    },
+    "synthetic_by_target": {
+      "0": 250,
+      "1": 250
+    }
+  },
+  "dataset_identity": {
+    "claim_guardrail": "The 500 synthetic rows are generated training examples, not additional observed patients or independent validation subjects.",
+    "observed_subjects": 88,
+    "synthetic_training_examples": 500,
+    "total_active_training_rows": 588,
+    "validation_subject_policy": "Only the 88 rows marked record_source=real and validation_eligible=true may be treated as independent validation subjects."
+  },
+  "distribution_comparison": {
+    "BMI": {
+      "real": {
+        "count": 88,
+        "maximum": 31.22,
+        "mean": 23.429773,
+        "median": 23.35,
+        "minimum": 14.72,
+        "p25": 20.9225,
+        "p75": 25.7275,
+        "standard_deviation": 3.342203
+      },
+      "synthetic": {
+        "count": 500,
+        "maximum": 31.08,
+        "mean": 23.52784,
+        "median": 23.955,
+        "minimum": 15.97,
+        "p25": 21.26,
+        "p75": 25.46,
+        "standard_deviation": 2.83231
+      },
+      "synthetic_minus_real_mean": 0.098067
+    },
+    "VAS score": {
+      "real": {
+        "count": 88,
+        "maximum": 6.0,
+        "mean": 1.784091,
+        "median": 2.0,
+        "minimum": 0.0,
+        "p25": 0.0,
+        "p75": 3.0,
+        "standard_deviation": 1.711683
+      },
+      "real_category_distribution": {
+        "0": {
+          "count": 30,
+          "proportion": 0.340909
+        },
+        "1": {
+          "count": 10,
+          "proportion": 0.113636
+        },
+        "2": {
+          "count": 22,
+          "proportion": 0.25
+        },
+        "3": {
+          "count": 12,
+          "proportion": 0.136364
+        },
+        "4": {
+          "count": 6,
+          "proportion": 0.068182
+        },
+        "5": {
+          "count": 5,
+          "proportion": 0.056818
+        },
+        "6": {
+          "count": 3,
+          "proportion": 0.034091
+        }
+      },
+      "synthetic": {
+        "count": 500,
+        "maximum": 4.0,
+        "mean": 1.46,
+        "median": 2.0,
+        "minimum": 0.0,
+        "p25": 0.0,
+        "p75": 2.0,
+        "standard_deviation": 1.252012
+      },
+      "synthetic_category_distribution": {
+        "0": {
+          "count": 191,
+          "proportion": 0.382
+        },
+        "1": {
+          "count": 14,
+          "proportion": 0.028
+        },
+        "2": {
+          "count": 181,
+          "proportion": 0.362
+        },
+        "3": {
+          "count": 102,
+          "proportion": 0.204
+        },
+        "4": {
+          "count": 12,
+          "proportion": 0.024
+        }
+      },
+      "synthetic_minus_real_mean": -0.324091
+    },
+    "age": {
+      "real": {
+        "count": 88,
+        "maximum": 80.0,
+        "mean": 61.579545,
+        "median": 60.0,
+        "minimum": 40.0,
+        "p25": 60.0,
+        "p75": 63.5,
+        "standard_deviation": 6.552567
+      },
+      "synthetic": {
+        "count": 500,
+        "maximum": 80.0,
+        "mean": 61.726,
+        "median": 60.0,
+        "minimum": 42.0,
+        "p25": 60.0,
+        "p75": 66.25,
+        "standard_deviation": 6.239936
+      },
+      "synthetic_minus_real_mean": 0.146455
+    },
+    "gender": {
+      "real": {
+        "count": 88,
+        "maximum": 1.0,
+        "mean": 0.102273,
+        "median": 0.0,
+        "minimum": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "standard_deviation": 0.304743
+      },
+      "real_category_distribution": {
+        "0": {
+          "count": 79,
+          "proportion": 0.897727
+        },
+        "1": {
+          "count": 9,
+          "proportion": 0.102273
+        }
+      },
+      "synthetic": {
+        "count": 500,
+        "maximum": 0.0,
+        "mean": 0.0,
+        "median": 0.0,
+        "minimum": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "standard_deviation": 0.0
+      },
+      "synthetic_category_distribution": {
+        "0": {
+          "count": 500,
+          "proportion": 1.0
+        }
+      },
+      "synthetic_minus_real_mean": -0.102273
+    }
+  },
+  "distribution_comparison_by_target": {
+    "0": {
+      "BMI": {
+        "real": {
+          "count": 45,
+          "maximum": 30.39,
+          "mean": 23.370222,
+          "median": 23.8,
+          "minimum": 14.72,
+          "p25": 20.7,
+          "p75": 25.78,
+          "standard_deviation": 3.495856
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 30.36,
+          "mean": 23.4698,
+          "median": 24.215,
+          "minimum": 15.97,
+          "p25": 20.71,
+          "p75": 25.7175,
+          "standard_deviation": 3.150999
+        },
+        "synthetic_minus_real_mean": 0.099578
+      },
+      "VAS score": {
+        "real": {
+          "count": 45,
+          "maximum": 4.0,
+          "mean": 0.977778,
+          "median": 0.0,
+          "minimum": 0.0,
+          "p25": 0.0,
+          "p75": 2.0,
+          "standard_deviation": 1.215223
+        },
+        "real_category_distribution": {
+          "0": {
+            "count": 23,
+            "proportion": 0.511111
+          },
+          "1": {
+            "count": 7,
+            "proportion": 0.155556
+          },
+          "2": {
+            "count": 11,
+            "proportion": 0.244444
+          },
+          "3": {
+            "count": 1,
+            "proportion": 0.022222
+          },
+          "4": {
+            "count": 3,
+            "proportion": 0.066667
+          }
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 4.0,
+          "mean": 0.792,
+          "median": 0.0,
+          "minimum": 0.0,
+          "p25": 0.0,
+          "p75": 2.0,
+          "standard_deviation": 1.135736
+        },
+        "synthetic_category_distribution": {
+          "0": {
+            "count": 156,
+            "proportion": 0.624
+          },
+          "1": {
+            "count": 14,
+            "proportion": 0.056
+          },
+          "2": {
+            "count": 68,
+            "proportion": 0.272
+          },
+          "4": {
+            "count": 12,
+            "proportion": 0.048
+          }
+        },
+        "synthetic_minus_real_mean": -0.185778
+      },
+      "age": {
+        "real": {
+          "count": 45,
+          "maximum": 70.0,
+          "mean": 61.511111,
+          "median": 60.0,
+          "minimum": 50.0,
+          "p25": 60.0,
+          "p75": 60.0,
+          "standard_deviation": 4.076664
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 70.0,
+          "mean": 61.676,
+          "median": 60.0,
+          "minimum": 54.0,
+          "p25": 60.0,
+          "p75": 60.0,
+          "standard_deviation": 3.731315
+        },
+        "synthetic_minus_real_mean": 0.164889
+      },
+      "gender": {
+        "real": {
+          "count": 45,
+          "maximum": 1.0,
+          "mean": 0.088889,
+          "median": 0.0,
+          "minimum": 0.0,
+          "p25": 0.0,
+          "p75": 0.0,
+          "standard_deviation": 0.287799
+        },
+        "real_category_distribution": {
+          "0": {
+            "count": 41,
+            "proportion": 0.911111
+          },
+          "1": {
+            "count": 4,
+            "proportion": 0.088889
+          }
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 0.0,
+          "mean": 0.0,
+          "median": 0.0,
+          "minimum": 0.0,
+          "p25": 0.0,
+          "p75": 0.0,
+          "standard_deviation": 0.0
+        },
+        "synthetic_category_distribution": {
+          "0": {
+            "count": 250,
+            "proportion": 1.0
+          }
+        },
+        "synthetic_minus_real_mean": -0.088889
+      }
+    },
+    "1": {
+      "BMI": {
+        "real": {
+          "count": 43,
+          "maximum": 31.22,
+          "mean": 23.492093,
+          "median": 23.14,
+          "minimum": 15.24,
+          "p25": 21.085,
+          "p75": 25.595,
+          "standard_deviation": 3.213688
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 31.08,
+          "mean": 23.58588,
+          "median": 23.78,
+          "minimum": 16.06,
+          "p25": 21.42,
+          "p75": 25.375,
+          "standard_deviation": 2.478026
+        },
+        "synthetic_minus_real_mean": 0.093787
+      },
+      "VAS score": {
+        "real": {
+          "count": 43,
+          "maximum": 6.0,
+          "mean": 2.627907,
+          "median": 3.0,
+          "minimum": 0.0,
+          "p25": 2.0,
+          "p75": 3.5,
+          "standard_deviation": 1.759644
+        },
+        "real_category_distribution": {
+          "0": {
+            "count": 7,
+            "proportion": 0.162791
+          },
+          "1": {
+            "count": 3,
+            "proportion": 0.069767
+          },
+          "2": {
+            "count": 11,
+            "proportion": 0.255814
+          },
+          "3": {
+            "count": 11,
+            "proportion": 0.255814
+          },
+          "4": {
+            "count": 3,
+            "proportion": 0.069767
+          },
+          "5": {
+            "count": 5,
+            "proportion": 0.116279
+          },
+          "6": {
+            "count": 3,
+            "proportion": 0.069767
+          }
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 3.0,
+          "mean": 2.128,
+          "median": 2.0,
+          "minimum": 0.0,
+          "p25": 2.0,
+          "p75": 3.0,
+          "standard_deviation": 0.977465
+        },
+        "synthetic_category_distribution": {
+          "0": {
+            "count": 35,
+            "proportion": 0.14
+          },
+          "2": {
+            "count": 113,
+            "proportion": 0.452
+          },
+          "3": {
+            "count": 102,
+            "proportion": 0.408
+          }
+        },
+        "synthetic_minus_real_mean": -0.499907
+      },
+      "age": {
+        "real": {
+          "count": 43,
+          "maximum": 80.0,
+          "mean": 61.651163,
+          "median": 60.0,
+          "minimum": 40.0,
+          "p25": 60.0,
+          "p75": 70.0,
+          "standard_deviation": 8.456848
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 80.0,
+          "mean": 61.776,
+          "median": 60.0,
+          "minimum": 42.0,
+          "p25": 60.0,
+          "p75": 70.0,
+          "standard_deviation": 8.006387
+        },
+        "synthetic_minus_real_mean": 0.124837
+      },
+      "gender": {
+        "real": {
+          "count": 43,
+          "maximum": 1.0,
+          "mean": 0.116279,
+          "median": 0.0,
+          "minimum": 0.0,
+          "p25": 0.0,
+          "p75": 0.0,
+          "standard_deviation": 0.324353
+        },
+        "real_category_distribution": {
+          "0": {
+            "count": 38,
+            "proportion": 0.883721
+          },
+          "1": {
+            "count": 5,
+            "proportion": 0.116279
+          }
+        },
+        "synthetic": {
+          "count": 250,
+          "maximum": 0.0,
+          "mean": 0.0,
+          "median": 0.0,
+          "minimum": 0.0,
+          "p25": 0.0,
+          "p75": 0.0,
+          "standard_deviation": 0.0
+        },
+        "synthetic_category_distribution": {
+          "0": {
+            "count": 250,
+            "proportion": 1.0
+          }
+        },
+        "synthetic_minus_real_mean": -0.116279
+      }
+    }
+  },
+  "feature_ranges": {
+    "BMI": {
+      "integer": false,
+      "maximum": 80,
+      "minimum_exclusive": 0
+    },
+    "VAS score": {
+      "integer": true,
+      "maximum": 10,
+      "minimum": 0
+    },
+    "age": {
+      "integer": true,
+      "maximum": 100,
+      "minimum": 18
+    }
+  },
+  "files": {
+    "active_training_dataset": "full_indicators_summary.csv",
+    "active_training_dataset_sha256": "e7bd3eee8a4ba3ece001a504cb96684ab0b102cf17e808f431ffc70c05d86b39",
+    "original_dataset": "full_indicators_summary.original.csv",
+    "original_dataset_sha256": "75bd6e52bf3950c8319efa20a72affbfe381685944f092530e10644e6813ca27",
+    "quality_report": "synthetic_data_quality_report.json"
+  },
+  "generation": {
+    "candidate_rows_generated": 2000,
+    "candidate_rows_matching_real_feature_vectors_removed": 82,
+    "candidate_synthetic_rows_requested_per_target": 1000,
+    "categorical_features": [
+      "gender",
+      "VAS score"
+    ],
+    "duplicate_candidate_feature_vectors_removed": 429,
+    "k_neighbors": 5,
+    "method": "SMOTENC",
+    "postprocessing": [
+      "age rounded to integer",
+      "BMI rounded to two decimal places",
+      "VAS score rounded to integer",
+      "candidate feature rows matching real feature rows removed",
+      "duplicate synthetic feature rows removed before deterministic selection"
+    ],
+    "random_seed": 42,
+    "selected_synthetic_rows_per_target": 250,
+    "unique_candidates_available_by_target": {
+      "0": 733,
+      "1": 756
+    }
+  },
+  "quality_checks": {
+    "active_row_count_valid": true,
+    "feature_ranges_valid": true,
+    "gender_categories_valid": true,
+    "model_columns_have_no_missing_values": true,
+    "original_dataset_hash_preserved": true,
+    "original_row_count_valid": true,
+    "provenance_fields_have_no_missing_values": true,
+    "real_rows_eligible_for_validation": true,
+    "real_rows_match_original": true,
+    "record_ids_unique": true,
+    "record_source_counts_valid": true,
+    "synthetic_feature_rows_unique": true,
+    "synthetic_rows_do_not_copy_real_feature_rows": true,
+    "synthetic_rows_excluded_from_validation": true,
+    "synthetic_target_counts_valid": true,
+    "target_labels_valid": true
+  },
+  "quality_status": "passed_with_warnings",
+  "quality_warnings": [
+    {
+      "categories_present_in_real_but_missing_from_synthetic": [
+        1
+      ],
+      "code": "synthetic_category_coverage_gap",
+      "feature": "gender",
+      "interpretation": "The synthetic data does not cover every category observed in the 88 real subjects; it must not be treated as additional clinical evidence."
+    },
+    {
+      "categories_present_in_real_but_missing_from_synthetic": [
+        5,
+        6
+      ],
+      "code": "synthetic_category_coverage_gap",
+      "feature": "VAS score",
+      "interpretation": "The synthetic data does not cover every category observed in the 88 real subjects; it must not be treated as additional clinical evidence."
+    }
+  ],
+  "schema_version": 1
+}
