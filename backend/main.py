@@ -11,10 +11,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from backend.explainability import LogisticRegressionExplainer
+from backend.explainability import build_explainer
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+ACTIVE_DATA_PATH = ROOT_DIR / "data" / "full_indicators_summary.csv"
 MODEL_PATH = ROOT_DIR / "models" / "oa_model.pkl"
 FEATURES_PATH = ROOT_DIR / "models" / "features.pkl"
 METADATA_PATH = ROOT_DIR / "models" / "model_metadata.json"
@@ -190,7 +191,8 @@ def load_resources():
     try:
         model = joblib.load(MODEL_PATH)
         features = list(joblib.load(FEATURES_PATH))
-        explainer = LogisticRegressionExplainer(model, features)
+        active_data = pd.read_csv(ACTIVE_DATA_PATH, encoding="utf-8-sig")
+        explainer = build_explainer(model, features, active_data)
         model_version = f"oa-model-{file_sha256(MODEL_PATH)[:12]}"
     except Exception as exc:  # Keep /health available when artifacts cannot load.
         model_load_error = str(exc)
@@ -329,21 +331,22 @@ def evaluation():
         "candidate_models": candidates,
         "selected_model": model_name,
         "validation_strategy": (
-            "Stratified 5-fold cross-validation on the 88 original subjects; SMOTENC "
-            "augmentation is generated only from each training partition."
+            "Stratified 5-fold cross-validation on the unified 588-row active dataset; "
+            "observed and synthetic rows are modeled together."
         ),
         "confusion_matrix": {
             "labels": ["Healthy", "Knee OA"],
             "matrix": matrix,
-            "evaluated_on": "real out-of-fold subjects only",
+            "evaluated_on": "all active out-of-fold rows",
         },
         "global_feature_importance_method": (
-            "Normalized absolute standardized Logistic Regression coefficients."
+            "Model-based feature importance from the selected fitted estimator."
         ),
         "global_feature_importance": explainer.global_feature_importance,
         "disclaimer": (
             "These are internal prototype cross-validation results, not external clinical "
-            "validation. Synthetic rows are training augmentation, not additional patients."
+            "validation. Synthetic rows are generated examples, not additional patients or "
+            "independent clinical evidence."
         ),
     }
 

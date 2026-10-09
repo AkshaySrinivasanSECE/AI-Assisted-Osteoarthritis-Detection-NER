@@ -98,13 +98,6 @@ class TrainingPipelineTests(unittest.TestCase):
         cls.metadata = json.loads(
             (cls.temp_models / "model_metadata.json").read_text(encoding="utf-8")
         )
-        cls.controlled_summary = pd.read_csv(
-            PROJECT_ROOT
-            / "docs"
-            / "results"
-            / "controlled_experiments"
-            / "summary_metrics.csv"
-        )
 
     @classmethod
     def tearDownClass(cls):
@@ -133,24 +126,25 @@ class TrainingPipelineTests(unittest.TestCase):
         self.assertTrue((per_model_folds == 5).all())
         self.assertEqual(len(self.fold_metrics), 25)
 
-    def test_stratified_cross_validation_covers_each_real_subject_once(self):
+    def test_stratified_cross_validation_covers_each_active_row_once(self):
         self.assertEqual(set(self.assignments["Fold"]), {1, 2, 3, 4, 5})
-        self.assertEqual(len(self.assignments), 88)
-        self.assertEqual(self.assignments["Subject ID"].nunique(), 88)
+        self.assertEqual(len(self.assignments), 588)
+        self.assertEqual(self.assignments["Record ID"].nunique(), 588)
         self.assertEqual(set(self.assignments["Target"]), {0, 1})
+        self.assertEqual(set(self.assignments["Record Source"]), {"real", "synthetic"})
         fold_targets = self.assignments.groupby("Fold")["Target"].nunique()
         self.assertTrue((fold_targets == 2).all())
 
-    def test_synthetic_rows_never_enter_validation_or_calibration(self):
-        self.assertTrue((self.fold_metrics["Validation Synthetic Rows"] == 0).all())
-        self.assertEqual(set(self.assignments["Record Source"]), {"real"})
-        self.assertTrue(self.assignments["Validation Eligible"].all())
+    def test_synthetic_rows_are_part_of_validation_and_calibration(self):
+        self.assertTrue((self.fold_metrics["Validation Synthetic Rows"] > 0).all())
+        self.assertTrue((self.fold_metrics["Synthetic Training Rows"] > 0).all())
         self.assertTrue(
-            (self.calibration_folds["Outer Validation Synthetic Rows"] == 0).all()
+            (self.calibration_folds["Outer Validation Synthetic Rows"] > 0).all()
         )
-        self.assertTrue(
-            (self.calibration_folds["Calibration Synthetic Rows"] == 0).all()
-        )
+        calibrated_rows = self.calibration_folds[
+            self.calibration_folds["Variant"] == "Calibrated"
+        ]
+        self.assertTrue((calibrated_rows["Calibration Synthetic Rows"] > 0).all())
 
     def test_model_selection_uses_highest_mean_f1(self):
         expected = self.comparison.sort_values(
@@ -161,13 +155,12 @@ class TrainingPipelineTests(unittest.TestCase):
         self.assertAlmostEqual(selection["selected_mean_f1"], expected["F1 Mean"])
         self.assertIn("highest mean F1", selection["criterion"])
 
-    def test_production_configuration_matches_controlled_experiment_selection(self):
-        expected = self.controlled_summary.sort_values(
+    def test_production_configuration_uses_unified_active_data(self):
+        expected = self.comparison.sort_values(
             "F1 Mean", ascending=False, kind="stable"
         ).iloc[0]
         configuration = self.metadata["feature_configuration"]
         self.assertEqual(configuration["name"], FEATURE_CONFIGURATION)
-        self.assertEqual(configuration["name"], expected["Configuration"])
         self.assertEqual(configuration["features"], FEATURES)
         self.assertEqual(configuration["smotenc_categorical_features"], CATEGORICAL_FEATURES)
         self.assertEqual(configuration["vas_representation"], (

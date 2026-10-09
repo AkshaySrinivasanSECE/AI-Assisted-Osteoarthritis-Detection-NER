@@ -18,11 +18,11 @@
     }
   },
   "dataset_identity": {
-    "claim_guardrail": "The 500 synthetic rows are generated training examples, not additional observed patients or independent validation subjects.",
+    "claim_guardrail": "The 500 synthetic rows are generated examples, not additional observed patients or independent clinical evidence.",
     "observed_subjects": 88,
     "synthetic_training_examples": 500,
     "total_active_training_rows": 588,
-    "validation_subject_policy": "Only the 88 rows marked record_source=real and validation_eligible=true may be treated as independent validation subjects."
+    "validation_subject_policy": "All 588 active rows are eligible for the unified model's stratified folds; record_source remains an audit field."
   },
   "distribution_comparison": {
     "BMI": {
@@ -511,7 +511,7 @@
   },
   "files": {
     "active_training_dataset": "full_indicators_summary.csv",
-    "active_training_dataset_sha256": "e7bd3eee8a4ba3ece001a504cb96684ab0b102cf17e808f431ffc70c05d86b39",
+    "active_training_dataset_sha256": "3407b61ddfeb1d4db0f20e0c819cdc6f071854214953276b1d0a3b4d563e1f9b",
     "original_dataset": "full_indicators_summary.original.csv",
     "original_dataset_sha256": "75bd6e52bf3950c8319efa20a72affbfe381685944f092530e10644e6813ca27",
     "quality_report": "synthetic_data_quality_report.json"
@@ -543,19 +543,19 @@
   },
   "quality_checks": {
     "active_row_count_valid": true,
+    "all_active_rows_eligible_for_validation": true,
     "feature_ranges_valid": true,
     "gender_categories_valid": true,
     "model_columns_have_no_missing_values": true,
     "original_dataset_hash_preserved": true,
     "original_row_count_valid": true,
     "provenance_fields_have_no_missing_values": true,
-    "real_rows_eligible_for_validation": true,
     "real_rows_match_original": true,
     "record_ids_unique": true,
     "record_source_counts_valid": true,
     "synthetic_feature_rows_unique": true,
     "synthetic_rows_do_not_copy_real_feature_rows": true,
-    "synthetic_rows_excluded_from_validation": true,
+    "synthetic_rows_included_in_unified_validation": true,
     "synthetic_target_counts_valid": true,
     "target_labels_valid": true
   },
@@ -567,7 +567,7 @@
       ],
       "code": "synthetic_category_coverage_gap",
       "feature": "gender",
-      "interpretation": "The synthetic data does not cover every category observed in the 88 real subjects; it must not be treated as additional clinical evidence."
+      "interpretation": "The synthetic data does not cover every category observed in the 88 real subjects; retain provenance when interpreting the unified model."
     },
     {
       "categories_present_in_real_but_missing_from_synthetic": [
@@ -576,7 +576,7 @@
       ],
       "code": "synthetic_category_coverage_gap",
       "feature": "VAS score",
-      "interpretation": "The synthetic data does not cover every category observed in the 88 real subjects; it must not be treated as additional clinical evidence."
+      "interpretation": "The synthetic data does not cover every category observed in the 88 real subjects; retain provenance when interpreting the unified model."
     }
   ],
   "schema_version": 1

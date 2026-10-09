@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from imblearn.over_sampling import SMOTENC
 from sklearn.base import clone
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier
@@ -63,53 +62,6 @@ def build_models():
     }
 
 
-def augment_training_fold(X_train, y_train):
-    """Generate augmentation from one real training partition only."""
-    X_train = X_train[FEATURES].reset_index(drop=True)
-    y_train = y_train.astype(int).reset_index(drop=True)
-    class_counts = y_train.value_counts().sort_index()
-    if set(class_counts.index) != {0, 1}:
-        raise ValueError(f"Training partition must contain target labels 0 and 1: {class_counts.to_dict()}")
-    if int(class_counts.min()) < 2:
-        raise ValueError("Each training class needs at least two real subjects for SMOTENC.")
-
-    target_counts = {
-        int(group): int(count + SYNTHETIC_PER_CLASS)
-        for group, count in class_counts.items()
-    }
-    sampler = SMOTENC(
-        categorical_features=[FEATURES.index(feature) for feature in CATEGORICAL_FEATURES],
-        sampling_strategy=target_counts,
-        random_state=RANDOM_STATE,
-        k_neighbors=min(5, int(class_counts.min()) - 1),
-    )
-    sampled_X, sampled_y = sampler.fit_resample(X_train, y_train)
-    sampled_X = pd.DataFrame(sampled_X, columns=FEATURES)
-    sampled_y = pd.Series(sampled_y, name=TARGET).astype(int)
-    sampled_X["age"] = sampled_X["age"].round().astype(int)
-    sampled_X["gender"] = sampled_X["gender"].round().astype(int)
-    sampled_X["VAS score"] = sampled_X["VAS score"].round().astype(int)
-    sampled_X["BMI"] = sampled_X["BMI"].round(2)
-
-    synthetic_rows = len(sampled_X) - len(X_train)
-    if synthetic_rows != SYNTHETIC_PER_CLASS * 2:
-        raise ValueError(f"Expected 500 fold-local synthetic rows; generated {synthetic_rows}.")
-
-    metadata = {
-        "real_training_rows": int(len(X_train)),
-        "synthetic_training_rows": int(synthetic_rows),
-        "augmented_training_rows": int(len(sampled_X)),
-        "real_training_by_target": {
-            str(key): int(value) for key, value in class_counts.items()
-        },
-        "synthetic_training_by_target": {
-            "0": SYNTHETIC_PER_CLASS,
-            "1": SYNTHETIC_PER_CLASS,
-        },
-    }
-    return sampled_X, sampled_y, metadata
-
-
 def classification_metrics(y_true, y_pred):
     return {
         "Accuracy": accuracy_score(y_true, y_pred),
@@ -142,14 +94,40 @@ def summarize_fold_metrics(fold_metrics_df):
     )
 
 
-def cross_validate_with_fold_augmentation(X, y, models, cv, subject_ids=None):
-    """Compare models with real-only outer validation folds."""
+def _source_counts(record_sources, indices):
+    selected = pd.Series(record_sources).iloc[list(indices)]
+    counts = selected.value_counts().to_dict()
+    return {
+        "real": int(counts.get("real", 0)),
+        "synthetic": int(counts.get("synthetic", 0)),
+    }
+
+
+def cross_validate_on_unified_dataset(
+    X,
+    y,
+    models,
+    cv,
+    record_ids=None,
+    record_sources=None,
+):
+    """Compare models using the complete active table in every fold.
+
+    Synthetic rows are already present in ``X`` and are treated exactly like
+    observed rows. Their source is retained only in audit columns.
+    """
     X = X[FEATURES].reset_index(drop=True)
     y = y.astype(int).reset_index(drop=True)
-    if subject_ids is None:
-        subject_ids = pd.Series(range(1, len(y) + 1))
+    if record_ids is None:
+        record_ids = pd.Series(range(1, len(y) + 1))
     else:
-        subject_ids = pd.Series(subject_ids).reset_index(drop=True)
+        record_ids = pd.Series(record_ids).reset_index(drop=True)
+    if record_sources is None:
+        record_sources = pd.Series(["real"] * len(y))
+    else:
+        record_sources = pd.Series(record_sources).reset_index(drop=True)
+    if len(record_ids) != len(y) or len(record_sources) != len(y):
+        raise ValueError("Record IDs and sources must have one value per active row.")
 
     fold_metric_rows = []
     fold_assignment_rows = []
@@ -165,20 +143,20 @@ def cross_validate_with_fold_augmentation(X, y, models, cv, subject_ids=None):
         y_train = y.iloc[train_indices]
         X_validation = X.iloc[validation_indices]
         y_validation = y.iloc[validation_indices]
-        augmented_X, augmented_y, augmentation = augment_training_fold(X_train, y_train)
+        train_sources = _source_counts(record_sources, train_indices)
+        validation_sources = _source_counts(record_sources, validation_indices)
 
         for validation_index in validation_indices:
             fold_assignment_rows.append({
                 "Fold": fold_number,
-                "Subject ID": int(subject_ids.iloc[validation_index]),
+                "Record ID": str(record_ids.iloc[validation_index]),
                 "Target": int(y.iloc[validation_index]),
-                "Record Source": "real",
-                "Validation Eligible": True,
+                "Record Source": str(record_sources.iloc[validation_index]),
             })
 
         for name, estimator in models.items():
             fold_model = clone(estimator)
-            fold_model.fit(augmented_X, augmented_y)
+            fold_model.fit(X_train, y_train)
             predictions = fold_model.predict(X_validation).astype(int)
             probabilities = positive_class_probability(fold_model, X_validation)
             out_of_fold_predictions[name][validation_indices] = predictions
@@ -186,18 +164,18 @@ def cross_validate_with_fold_augmentation(X, y, models, cv, subject_ids=None):
             fold_metric_rows.append({
                 "Model": name,
                 "Fold": fold_number,
-                "Real Training Rows": augmentation["real_training_rows"],
-                "Synthetic Training Rows": augmentation["synthetic_training_rows"],
-                "Validation Real Rows": int(len(validation_indices)),
-                "Validation Synthetic Rows": 0,
+                "Training Rows": int(len(train_indices)),
+                "Real Training Rows": train_sources["real"],
+                "Synthetic Training Rows": train_sources["synthetic"],
+                "Validation Rows": int(len(validation_indices)),
+                "Validation Real Rows": validation_sources["real"],
+                "Validation Synthetic Rows": validation_sources["synthetic"],
                 **classification_metrics(y_validation, predictions),
             })
 
     fold_metrics_df = pd.DataFrame(fold_metric_rows)
-    if (fold_metrics_df["Validation Synthetic Rows"] != 0).any():
-        raise RuntimeError("Synthetic rows entered an outer validation partition.")
     if any((predictions < 0).any() for predictions in out_of_fold_predictions.values()):
-        raise RuntimeError("Some original subjects did not receive an out-of-fold prediction.")
+        raise RuntimeError("Some active rows did not receive an out-of-fold prediction.")
 
     return {
         "summary": summarize_fold_metrics(fold_metrics_df),
@@ -206,6 +184,17 @@ def cross_validate_with_fold_augmentation(X, y, models, cv, subject_ids=None):
         "oof_predictions": out_of_fold_predictions,
         "oof_probabilities": out_of_fold_probabilities,
     }
+
+
+def cross_validate_with_fold_augmentation(X, y, models, cv, subject_ids=None):
+    """Backward-compatible alias for the unified active-data cross-validation."""
+    return cross_validate_on_unified_dataset(
+        X,
+        y,
+        models,
+        cv,
+        record_ids=subject_ids,
+    )
 
 
 def build_prefit_calibrator(prefit_model):
@@ -233,10 +222,15 @@ def evaluate_selected_model(
     cv,
     baseline_oof_predictions,
     baseline_oof_probabilities,
+    record_sources=None,
 ):
-    """Evaluate leakage-safe calibration and held-out permutation importance."""
+    """Evaluate calibration and permutation importance on unified active folds."""
     X = X[FEATURES].reset_index(drop=True)
     y = y.astype(int).reset_index(drop=True)
+    if record_sources is None:
+        record_sources = pd.Series(["real"] * len(y))
+    else:
+        record_sources = pd.Series(record_sources).reset_index(drop=True)
     calibrated_oof_predictions = np.full(len(y), -1, dtype=int)
     calibrated_oof_probabilities = np.full(len(y), np.nan, dtype=float)
     calibration_fold_rows = []
@@ -250,11 +244,12 @@ def evaluate_selected_model(
     ):
         X_outer_train = X.iloc[outer_train_indices].reset_index(drop=True)
         y_outer_train = y.iloc[outer_train_indices].reset_index(drop=True)
+        outer_record_sources = record_sources.iloc[outer_train_indices].reset_index(drop=True)
         X_validation = X.iloc[validation_indices]
         y_validation = y.iloc[validation_indices]
+        outer_validation_sources = _source_counts(record_sources, validation_indices)
 
-        augmented_X, augmented_y, _ = augment_training_fold(X_outer_train, y_outer_train)
-        baseline_model = clone(estimator).fit(augmented_X, augmented_y)
+        baseline_model = clone(estimator).fit(X_outer_train, y_outer_train)
 
         calibration_split = StratifiedShuffleSplit(
             n_splits=1,
@@ -268,10 +263,7 @@ def evaluate_selected_model(
         y_base = y_outer_train.iloc[base_indices].reset_index(drop=True)
         X_calibration = X_outer_train.iloc[calibration_indices]
         y_calibration = y_outer_train.iloc[calibration_indices]
-        calibrated_training_X, calibrated_training_y, calibration_augmentation = (
-            augment_training_fold(X_base, y_base)
-        )
-        prefit_model = clone(estimator).fit(calibrated_training_X, calibrated_training_y)
+        prefit_model = clone(estimator).fit(X_base, y_base)
         calibrated_model = build_prefit_calibrator(prefit_model)
         calibrated_model.fit(X_calibration, y_calibration)
 
@@ -286,24 +278,29 @@ def evaluate_selected_model(
             ("Uncalibrated", baseline_predictions, baseline_probabilities),
             ("Calibrated", calibrated_predictions, calibrated_probabilities),
         ):
+            calibration_sources = _source_counts(outer_record_sources, calibration_indices)
+            base_sources = _source_counts(outer_record_sources, base_indices)
+            outer_train_sources = _source_counts(record_sources, outer_train_indices)
             calibration_fold_rows.append({
                 "Variant": variant,
                 "Fold": fold_number,
-                "Outer Validation Real Rows": int(len(validation_indices)),
-                "Outer Validation Synthetic Rows": 0,
+                "Outer Validation Real Rows": outer_validation_sources["real"],
+                "Outer Validation Synthetic Rows": outer_validation_sources["synthetic"],
                 "Calibration Real Rows": (
-                    0 if variant == "Uncalibrated" else int(len(calibration_indices))
+                    0 if variant == "Uncalibrated" else calibration_sources["real"]
                 ),
-                "Calibration Synthetic Rows": 0,
+                "Calibration Synthetic Rows": (
+                    0 if variant == "Uncalibrated" else calibration_sources["synthetic"]
+                ),
                 "Base Real Training Rows": (
-                    int(len(outer_train_indices))
+                    outer_train_sources["real"]
                     if variant == "Uncalibrated"
-                    else int(len(base_indices))
+                    else base_sources["real"]
                 ),
                 "Base Synthetic Training Rows": (
-                    SYNTHETIC_PER_CLASS * 2
+                    outer_train_sources["synthetic"]
                     if variant == "Uncalibrated"
-                    else calibration_augmentation["synthetic_training_rows"]
+                    else base_sources["synthetic"]
                 ),
                 **classification_metrics(y_validation, predictions),
                 **probability_metrics(y_validation, probabilities),
@@ -330,8 +327,10 @@ def evaluate_selected_model(
                     "Feature": feature,
                     "Importance Mean": float(values.mean()),
                     "Importance Std": float(values.std(ddof=1)),
-                    "Held-Out Real Rows": int(len(validation_indices)),
-                    "Held-Out Synthetic Rows": 0,
+                    "Held-Out Real Rows": outer_validation_sources["real"],
+                    "Held-Out Synthetic Rows": _source_counts(
+                        record_sources, validation_indices
+                    )["synthetic"],
                     "Repeats": PERMUTATION_REPEATS,
                 })
 
@@ -399,27 +398,34 @@ def should_apply_calibration(calibration_summary):
     )
 
 
-def fit_final_calibrated_model(X_real, y_real, estimator):
-    X_real = X_real[FEATURES].reset_index(drop=True)
-    y_real = y_real.astype(int).reset_index(drop=True)
+def fit_final_calibrated_model(X, y, estimator, record_sources=None):
+    X = X[FEATURES].reset_index(drop=True)
+    y = y.astype(int).reset_index(drop=True)
+    if record_sources is None:
+        record_sources = pd.Series(["real"] * len(y))
+    else:
+        record_sources = pd.Series(record_sources).reset_index(drop=True)
     split = StratifiedShuffleSplit(
         n_splits=1,
         test_size=CALIBRATION_FRACTION,
         random_state=RANDOM_STATE,
     )
-    base_indices, calibration_indices = next(split.split(X_real, y_real))
-    X_base = X_real.iloc[base_indices].reset_index(drop=True)
-    y_base = y_real.iloc[base_indices].reset_index(drop=True)
-    X_calibration = X_real.iloc[calibration_indices]
-    y_calibration = y_real.iloc[calibration_indices]
-    augmented_X, augmented_y, augmentation = augment_training_fold(X_base, y_base)
-    prefit_model = clone(estimator).fit(augmented_X, augmented_y)
+    base_indices, calibration_indices = next(split.split(X, y))
+    X_base = X.iloc[base_indices].reset_index(drop=True)
+    y_base = y.iloc[base_indices].reset_index(drop=True)
+    X_calibration = X.iloc[calibration_indices]
+    y_calibration = y.iloc[calibration_indices]
+    prefit_model = clone(estimator).fit(X_base, y_base)
     calibrated_model = build_prefit_calibrator(prefit_model)
     calibrated_model.fit(X_calibration, y_calibration)
+    base_sources = _source_counts(record_sources, base_indices)
+    calibration_sources = _source_counts(record_sources, calibration_indices)
     metadata = {
-        "base_real_training_rows": int(len(base_indices)),
-        "base_synthetic_training_rows": augmentation["synthetic_training_rows"],
-        "real_calibration_rows": int(len(calibration_indices)),
-        "synthetic_calibration_rows": 0,
+        "base_training_rows": int(len(base_indices)),
+        "calibration_rows": int(len(calibration_indices)),
+        "base_real_training_rows": base_sources["real"],
+        "base_synthetic_training_rows": base_sources["synthetic"],
+        "real_calibration_rows": calibration_sources["real"],
+        "synthetic_calibration_rows": calibration_sources["synthetic"],
     }
     return calibrated_model, metadata

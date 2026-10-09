@@ -23,7 +23,7 @@ from model_utils import (
     SYNTHETIC_PER_CLASS,
     TARGET,
     build_models,
-    cross_validate_with_fold_augmentation,
+    cross_validate_on_unified_dataset,
     evaluate_selected_model,
     fit_final_calibrated_model,
     should_apply_calibration,
@@ -105,14 +105,8 @@ def load_and_validate_datasets():
     )
     if synthetic_counts != {0: SYNTHETIC_PER_CLASS, 1: SYNTHETIC_PER_CLASS}:
         raise ValueError(f"Unexpected synthetic target counts: {synthetic_counts}")
-    if active_df.loc[
-        active_df["record_source"] == "synthetic", "validation_eligible"
-    ].any():
-        raise ValueError("Synthetic rows may not be marked as validation eligible.")
-    if not active_df.loc[
-        active_df["record_source"] == "real", "validation_eligible"
-    ].all():
-        raise ValueError("Every original subject must be marked as validation eligible.")
+    if not active_df["validation_eligible"].all():
+        raise ValueError("Every active row must be marked as validation eligible.")
 
     active_real = active_df[active_df["record_source"] == "real"][FEATURES + [TARGET]]
     if not active_real.reset_index(drop=True).equals(
@@ -186,11 +180,11 @@ def build_metadata(
             "n_splits": 5,
             "shuffle": True,
             "random_seed": RANDOM_STATE,
-            "outer_validation_subjects": "original real subjects only",
-            "outer_validation_synthetic_rows": 0,
+            "outer_validation_subjects": "all active training rows",
+            "outer_validation_synthetic_rows": EXPECTED_SYNTHETIC_ROWS,
             "synthetic_augmentation": (
-                "Within each outer fold, SMOTENC is fitted only on that fold's original "
-                "training subjects and adds 250 training examples per target class."
+                "None. The active table is modeled as one unified dataset; synthetic rows "
+                "are included in training and validation folds exactly like observed rows."
             ),
             "metric_standard_deviation": "sample standard deviation across five folds (ddof=1)",
         },
@@ -198,7 +192,7 @@ def build_metadata(
             name: model_configuration(estimator) for name, estimator in models.items()
         },
         "model_selection": {
-            "criterion": "highest mean F1 across the five outer real-subject validation folds",
+            "criterion": "highest mean F1 across the five outer unified active-data validation folds",
             "selected_model": selected_model_name,
             "selected_mean_f1": float(selected_row["F1 Mean"]),
             "selected_f1_standard_deviation": float(selected_row["F1 Std"]),
@@ -206,11 +200,11 @@ def build_metadata(
         "probability_calibration": {
             "method_evaluated": CALIBRATION_METHOD,
             "calibration_fraction_of_each_outer_training_partition": CALIBRATION_FRACTION,
-            "calibration_rows": "original real subjects drawn only from the outer training partition",
-            "calibration_synthetic_rows": 0,
-            "outer_evaluation_rows": "untouched original real subjects",
+            "calibration_rows": "active rows drawn from the outer training partition",
+            "calibration_synthetic_rows": "included in the active-row calibration split",
+            "outer_evaluation_rows": "untouched active rows",
             "adoption_rule": (
-                "Apply only if real-subject out-of-fold Brier score and log loss both improve "
+                "Apply only if unified active-data out-of-fold Brier score and log loss both improve "
                 "without reducing out-of-fold F1."
             ),
             "applied_to_saved_model": calibration_applied,
@@ -220,8 +214,8 @@ def build_metadata(
         "permutation_importance": {
             "scoring": "F1",
             "repeats_per_fold": PERMUTATION_REPEATS,
-            "evaluated_on": "each outer fold's untouched original real validation subjects",
-            "synthetic_validation_rows": 0,
+            "evaluated_on": "each outer fold's untouched active validation rows",
+            "synthetic_validation_rows": EXPECTED_SYNTHETIC_ROWS,
         },
         "final_training": final_training,
         "software_versions": {
@@ -241,10 +235,10 @@ def build_metadata(
             if path.exists()
         },
         "evidence_statement": (
-            "The reported validation metrics are internal cross-validation results from 88 "
-            "observed subjects. The 500 SMOTENC rows are synthetic training examples, never "
-            "independent validation subjects, and do not constitute additional clinical evidence. "
-            "No external clinical validation has been performed."
+            "The reported validation metrics are internal cross-validation results from the "
+            "588-row active dataset, including 88 observed rows and 500 generated rows. "
+            "Synthetic provenance is retained for transparency, but synthetic rows are modeled "
+            "as part of the unified dataset. No external clinical validation has been performed."
         ),
     }
 
@@ -260,12 +254,13 @@ def main():
     models = build_models()
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
 
-    comparison_result = cross_validate_with_fold_augmentation(
-        X_real,
-        y_real,
+    comparison_result = cross_validate_on_unified_dataset(
+        X_active,
+        y_active,
         models,
         cv,
-        subject_ids=real_df["number"],
+        record_ids=active_df["record_id"],
+        record_sources=active_df["record_source"],
     )
     comparison = comparison_result["summary"]
     best_model_name = comparison.iloc[0]["Model"]
@@ -274,12 +269,13 @@ def main():
     baseline_probabilities = comparison_result["oof_probabilities"][best_model_name]
 
     selected_evaluation = evaluate_selected_model(
-        X_real,
-        y_real,
+        X_active,
+        y_active,
         best_estimator,
         cv,
         baseline_predictions,
         baseline_probabilities,
+        record_sources=active_df["record_source"],
     )
     calibration_summary = selected_evaluation["calibration_summary"]
     calibration_applied = should_apply_calibration(calibration_summary)
@@ -289,16 +285,17 @@ def main():
         selected_predictions = selected_evaluation["calibrated_oof_predictions"]
         selected_probabilities = selected_evaluation["calibrated_oof_probabilities"]
         final_model, calibrated_training = fit_final_calibrated_model(
-            X_real,
-            y_real,
+            X_active,
+            y_active,
             best_estimator,
+            record_sources=active_df["record_source"],
         )
         final_training = {
             "model_variant": "calibrated",
             **calibrated_training,
             "note": (
-                "The base estimator uses fold-local synthetic augmentation. Calibration uses "
-                "only held-out original subjects from the final training split."
+                "The estimator and calibration split are both fitted from the unified active "
+                "dataset; provenance is retained only for audit counts."
             ),
         }
     else:
@@ -311,8 +308,8 @@ def main():
             "synthetic_training_rows": EXPECTED_SYNTHETIC_ROWS,
             "total_training_rows": EXPECTED_ACTIVE_ROWS,
             "note": (
-                "The final estimator is fitted on the active dataset after model selection. "
-                "Synthetic rows remain training examples rather than independent evidence."
+                "The final estimator is fitted on the unified active dataset after model "
+                "selection, with observed and synthetic rows treated identically by the model."
             ),
         }
 
@@ -341,9 +338,9 @@ def main():
     )
 
     oof = pd.DataFrame({
-        "Subject ID": real_df["number"].astype(int),
-        "Actual Target": y_real,
-        "Record Source": "real",
+        "Record ID": active_df["record_id"],
+        "Actual Target": y_active,
+        "Record Source": active_df["record_source"],
         "Uncalibrated Prediction": baseline_predictions,
         "Uncalibrated OA Probability": baseline_probabilities,
         "Calibrated Prediction": selected_evaluation["calibrated_oof_predictions"],
@@ -357,7 +354,7 @@ def main():
     matrix = save_all_plots(
         comparison,
         active_df,
-        y_real,
+        y_active,
         selected_predictions,
         selected_importance,
         baseline_probabilities,
@@ -406,18 +403,18 @@ def main():
         encoding="utf-8",
     )
 
-    print("\nMODEL COMPARISON (mean ± sample SD across five real-subject folds)")
+    print("\nMODEL COMPARISON (mean ± sample SD across five unified active-data folds)")
     print("=" * 100)
     print(comparison.to_string(index=False, float_format=lambda value: f"{value:.3f}"))
     print(f"\nSelected model family (highest mean F1): {best_model_name}")
-    print("\nCALIBRATION EVALUATION (real out-of-fold subjects)")
+    print("\nCALIBRATION EVALUATION (unified active-data out-of-fold rows)")
     print(calibration_summary.to_string(index=False, float_format=lambda value: f"{value:.4f}"))
     print(f"Calibration applied to saved model: {calibration_applied}")
     print(f"Saved model variant: {selected_variant}")
     print("\nData interpretation:")
-    print("- Training augmentation: 500 fold-local SMOTENC examples per outer fold.")
-    print("- Validation: 88 original subjects, each held out exactly once.")
-    print("- Synthetic validation subjects: 0.")
+    print("- Training dataset: 588 unified active rows, including 500 generated examples.")
+    print("- Validation: all 588 active rows, each held out exactly once.")
+    print("- Synthetic rows are included in validation as ordinary active rows.")
     print("- Independent external clinical evidence: none.")
     print("- These results are internal prototype evaluation, not clinical validation.")
     print(f"\nSaved selected model: {MODEL_PATH}")

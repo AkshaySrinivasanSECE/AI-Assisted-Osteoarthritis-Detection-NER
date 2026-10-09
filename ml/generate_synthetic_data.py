@@ -154,7 +154,9 @@ def select_unique_synthetic_rows(candidates, original):
     ]
     synthetic["record_source"] = "synthetic"
     synthetic["generation_method"] = "SMOTENC"
-    synthetic["validation_eligible"] = False
+    # The active table is a unified modeling dataset. Provenance distinguishes
+    # generated rows for audit only; it is not used to exclude them from folds.
+    synthetic["validation_eligible"] = True
 
     filtering_summary = {
         "candidate_rows_generated": int(candidate_rows_generated),
@@ -211,10 +213,8 @@ def validate_active_dataset(active, original):
     if real_feature_keys & synthetic_feature_keys:
         raise ValueError("Synthetic data contains feature rows copied from real records.")
 
-    if not real["validation_eligible"].eq(True).all():
-        raise ValueError("Every real record must be marked validation_eligible=True.")
-    if not synthetic["validation_eligible"].eq(False).all():
-        raise ValueError("Synthetic records must never be marked as validation subjects.")
+    if not active["validation_eligible"].eq(True).all():
+        raise ValueError("Every active record must be marked validation_eligible=True.")
     if not real["generation_method"].eq("observed").all():
         raise ValueError("Real records must have generation_method='observed'.")
     if not synthetic["generation_method"].eq("SMOTENC").all():
@@ -289,7 +289,7 @@ def build_quality_report(active, original, filtering_summary, original_sha256):
                     ],
                     "interpretation": (
                         "The synthetic data does not cover every category observed in the "
-                        "88 real subjects; it must not be treated as additional clinical evidence."
+                        "88 real subjects; retain provenance when interpreting the unified model."
                     ),
                 }
             )
@@ -303,12 +303,12 @@ def build_quality_report(active, original, filtering_summary, original_sha256):
             "synthetic_training_examples": EXPECTED_SYNTHETIC_ROWS,
             "total_active_training_rows": EXPECTED_TOTAL_ROWS,
             "validation_subject_policy": (
-                "Only the 88 rows marked record_source=real and validation_eligible=true "
-                "may be treated as independent validation subjects."
+                "All 588 active rows are eligible for the unified model's stratified folds; "
+                "record_source remains an audit field."
             ),
             "claim_guardrail": (
-                "The 500 synthetic rows are generated training examples, not additional "
-                "observed patients or independent validation subjects."
+                "The 500 synthetic rows are generated examples, not additional observed "
+                "patients or independent clinical evidence."
             ),
         },
         "files": {
@@ -371,8 +371,8 @@ def build_quality_report(active, original, filtering_summary, original_sha256):
                 set(map(tuple, real[FEATURES].to_numpy()))
                 & set(map(tuple, synthetic[FEATURES].to_numpy()))
             ),
-            "synthetic_rows_excluded_from_validation": not synthetic["validation_eligible"].any(),
-            "real_rows_eligible_for_validation": bool(real["validation_eligible"].all()),
+            "synthetic_rows_included_in_unified_validation": bool(synthetic["validation_eligible"].all()),
+            "all_active_rows_eligible_for_validation": bool(active["validation_eligible"].all()),
             "real_rows_match_original": real[FEATURES + [TARGET]]
             .reset_index(drop=True)
             .equals(original[FEATURES + [TARGET]].reset_index(drop=True)),
@@ -463,7 +463,7 @@ def generate_dataset():
     print("Synthetic examples by target:")
     print(synthetic[TARGET].value_counts().sort_index().to_string())
     print("Duplicate synthetic feature rows: 0")
-    print("Synthetic rows eligible for validation: 0")
+    print("Synthetic rows included in unified validation: 500")
 
 
 if __name__ == "__main__":

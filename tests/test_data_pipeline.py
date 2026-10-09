@@ -70,7 +70,7 @@ class DatasetIntegrityTests(unittest.TestCase):
         self.assertEqual(set(self.real["generation_method"]), {"observed"})
         self.assertEqual(set(self.synthetic["generation_method"]), {"SMOTENC"})
         self.assertTrue(self.real["validation_eligible"].all())
-        self.assertFalse(self.synthetic["validation_eligible"].any())
+        self.assertTrue(self.synthetic["validation_eligible"].all())
         self.assertTrue(self.real["record_id"].str.startswith("real_").all())
         self.assertTrue(self.synthetic["record_id"].str.startswith("synthetic_").all())
 

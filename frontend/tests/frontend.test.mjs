@@ -57,8 +57,8 @@ const modelInfo = {
     stratified: true,
     shuffle: true,
     random_seed: 42,
-    validation_subjects: 'original real subjects only',
-    synthetic_validation_rows: 0,
+    validation_subjects: 'all active training rows',
+    synthetic_validation_rows: 500,
   },
 }
 
@@ -76,7 +76,7 @@ const globalImportance = [
 
 const evaluation = {
   selected_model: 'Logistic Regression',
-  validation_strategy: 'Stratified 5-fold cross-validation on original subjects.',
+  validation_strategy: 'Stratified 5-fold cross-validation on the unified active dataset.',
   candidate_models: [
     {
       model: 'Logistic Regression',
@@ -93,7 +93,7 @@ const evaluation = {
   confusion_matrix: {
     labels: ['Healthy', 'Knee OA'],
     matrix: [[30, 15], [10, 33]],
-    evaluated_on: 'real out-of-fold subjects only',
+    evaluated_on: 'all active out-of-fold rows',
   },
   global_feature_importance_method: 'Normalized coefficient importance.',
   global_feature_importance: globalImportance,

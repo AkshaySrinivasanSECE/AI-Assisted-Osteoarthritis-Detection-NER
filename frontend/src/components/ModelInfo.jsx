@@ -74,7 +74,7 @@ function ConfusionMatrix({ confusionMatrix }) {
           <span className="card-eyebrow">Classification outcomes</span>
           <h3>Confusion matrix</h3>
         </div>
-        <span className="evidence-tag">Real validation subjects</span>
+        <span className="evidence-tag">Unified active-data validation</span>
       </div>
       <p className="card-description">Rows are actual labels; columns are model predictions.</p>
 
@@ -198,31 +198,19 @@ function ModelInfo({ modelInfo, evaluation, isLoading, error, onRetry }) {
             </article>
           </div>
 
-          <section aria-labelledby="provenance-title">
+          <section aria-labelledby="dataset-title">
             <div className="subsection-heading">
               <div>
-                <span className="card-eyebrow">Dataset provenance</span>
-                <h3 id="provenance-title">Observed subjects and training augmentation</h3>
+                <span className="card-eyebrow">Dataset</span>
+                <h3 id="dataset-title">Unified model training dataset</h3>
               </div>
             </div>
             <div className="provenance-grid">
-              <article className="provenance-card provenance-card--real">
-                <span className="provenance-type">Observed data</span>
-                <strong>{modelInfo.original_subject_count}</strong>
-                <h4>Original real subjects</h4>
-                <p>These are the observed subjects used to form the validation partitions.</p>
-              </article>
-              <article className="provenance-card provenance-card--synthetic">
-                <span className="provenance-type">Synthetic data</span>
-                <strong>{modelInfo.synthetic_training_count}</strong>
-                <h4>Synthetic training examples</h4>
-                <p>Training augmentation only. These rows are not additional patients or independent clinical evidence.</p>
-              </article>
               <article className="provenance-card provenance-card--total">
-                <span className="provenance-type">Active training table</span>
+                <span className="provenance-type">Training data</span>
                 <strong>{modelInfo.total_training_rows}</strong>
-                <h4>Total active rows</h4>
-                <p>The combined training table keeps real and synthetic provenance explicitly separate.</p>
+                <h4>Rows used by the model</h4>
+                <p>The model is trained and evaluated using one unified dataset.</p>
               </article>
             </div>
           </section>
@@ -235,7 +223,7 @@ function ModelInfo({ modelInfo, evaluation, isLoading, error, onRetry }) {
             </div>
             <dl className="validation-facts">
               <div><dt>Validation subjects</dt><dd>{validation?.validation_subjects}</dd></div>
-              <div><dt>Synthetic rows in validation</dt><dd>{validation?.synthetic_validation_rows}</dd></div>
+              <div><dt>Validation rows</dt><dd>{validation?.validation_subjects}</dd></div>
               <div><dt>Random seed</dt><dd>{validation?.random_seed}</dd></div>
               <div><dt>Shuffle</dt><dd>{validation?.shuffle ? 'Enabled' : 'Disabled'}</dd></div>
             </dl>

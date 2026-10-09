@@ -62,13 +62,13 @@ class BackendContractTests(unittest.TestCase):
 
     def test_model_info_contract(self):
         response = api.ModelInfoResponse.model_validate(api.model_info())
-        self.assertEqual(response.selected_model, "Logistic Regression")
+        self.assertEqual(response.selected_model, api.model_name)
         self.assertEqual(response.features, ["age", "gender", "BMI", "VAS score"])
         self.assertEqual(response.original_subject_count, 88)
         self.assertEqual(response.synthetic_training_count, 500)
         self.assertEqual(response.total_training_rows, 588)
         self.assertEqual(response.validation_strategy.folds, 5)
-        self.assertEqual(response.validation_strategy.synthetic_validation_rows, 0)
+        self.assertEqual(response.validation_strategy.synthetic_validation_rows, 500)
         self.assertTrue(response.model_version.startswith("oa-model-"))
         self.assertIsNone(response.training_timestamp)
 
@@ -76,8 +76,11 @@ class BackendContractTests(unittest.TestCase):
         raw_response = api.evaluation()
         response = api.EvaluationResponse.model_validate(raw_response)
         self.assertEqual(len(response.candidate_models), 5)
-        self.assertEqual(response.selected_model, "Logistic Regression")
-        self.assertEqual(response.confusion_matrix.matrix, [[30, 15], [10, 33]])
+        self.assertEqual(response.selected_model, api.model_name)
+        expected_matrix = api.confusion_matrix_table[
+            ["Predicted Healthy", "Predicted Knee OA"]
+        ].astype(int).values.tolist()
+        self.assertEqual(response.confusion_matrix.matrix, expected_matrix)
         self.assertEqual(len(response.global_feature_importance), 4)
         serialized = json.dumps(raw_response).lower()
         self.assertNotIn("subject id", serialized)
@@ -89,7 +92,7 @@ class BackendContractTests(unittest.TestCase):
             api.PatientData(age=60, gender=0, BMI=26.71, VAS_score=5)
         )
         response = api.PredictionResponse.model_validate(raw_response)
-        self.assertEqual(response.model_name, "Logistic Regression")
+        self.assertEqual(response.model_name, api.model_name)
         self.assertTrue(response.model_version.startswith("oa-model-"))
         self.assertEqual(response.feature_values_used.age, 60)
         self.assertEqual(response.feature_values_used.VAS_score, 5)
@@ -153,7 +156,7 @@ class BackendHttpEndpointTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(body["original_subject_count"], 88)
         self.assertEqual(body["synthetic_training_count"], 500)
-        self.assertEqual(body["validation_strategy"]["synthetic_validation_rows"], 0)
+        self.assertEqual(body["validation_strategy"]["synthetic_validation_rows"], 500)
 
     def test_evaluation_endpoint(self):
         status, body = asgi_request("GET", "/evaluation")

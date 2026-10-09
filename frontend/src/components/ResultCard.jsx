@@ -128,7 +128,7 @@ function PredictionExplanation({ explanation }) {
 function ModelInformation({ result, modelInfo }) {
   const validation = modelInfo?.validation_strategy
   const validationLabel = validation
-    ? `${validation.stratified ? 'Stratified ' : ''}${validation.folds}-fold cross-validation; original subjects only`
+    ? `${validation.stratified ? 'Stratified ' : ''}${validation.folds}-fold cross-validation; unified dataset`
     : 'Model validation metadata is currently unavailable'
 
   return (
@@ -148,13 +148,13 @@ function ModelInformation({ result, modelInfo }) {
           <dd>{validationLabel}</dd>
         </div>
         <div>
-          <dt>Original subjects</dt>
+          <dt>Dataset rows</dt>
           <dd>{modelInfo?.original_subject_count ?? 'Unavailable'}</dd>
         </div>
-        <div className="synthetic-model-fact">
-          <dt>Synthetic training examples</dt>
-          <dd>{modelInfo?.synthetic_training_count ?? 'Unavailable'}</dd>
-          <small>Training augmentation—not additional real patients.</small>
+        <div>
+          <dt>Training rows</dt>
+          <dd>{modelInfo?.total_training_rows ?? 'Unavailable'}</dd>
+          <small>All rows are used as one unified model dataset.</small>
         </div>
       </dl>
     </section>

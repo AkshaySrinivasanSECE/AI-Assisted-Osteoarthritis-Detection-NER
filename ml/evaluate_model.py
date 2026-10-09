@@ -112,7 +112,7 @@ def save_probability_calibration(y_true, baseline_probabilities, calibrated_prob
             strategy="quantile",
         )
         ax.plot(predicted, observed, marker="o", linewidth=2, color=color, label=label)
-    ax.set_title("Probability Calibration on Real Out-of-Fold Subjects")
+    ax.set_title("Probability Calibration on Unified Active-Data OOF Rows")
     ax.set_xlabel("Mean predicted OA probability")
     ax.set_ylabel("Observed OA fraction")
     ax.set_xlim(0, 1)
@@ -141,12 +141,12 @@ def save_all_plots(
         y_true,
         selected_predictions,
         RESULTS_DIR / "confusion_matrix.png",
-        f"{selected_variant}; real OOF subjects",
+        f"{selected_variant}; unified active-data OOF rows",
     )
     save_feature_importance(
         selected_importance,
         RESULTS_DIR / "feature_importance.png",
-        f"{selected_variant}; real OOF subjects",
+        f"{selected_variant}; unified active-data OOF rows",
     )
     save_probability_calibration(
         y_true,

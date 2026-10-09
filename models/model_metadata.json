@@ -2,11 +2,11 @@
   "artifacts": {
     "calibration_comparison": {
       "path": "docs/results/calibration_comparison.csv",
-      "sha256": "381266f04b7f11f60c0f93851b32599eda5460ef1e1f7520f14e4e048cdf8266"
+      "sha256": "dc41e2f703a0b7d2f578e92c9499bcf0974dfcdda39b2020061851541e48f0fa"
     },
     "calibration_fold_metrics": {
       "path": "docs/results/calibration_fold_metrics.csv",
-      "sha256": "efb3003fa980a3b032c3ecaabdfdaf3f823d23d67fda51df6303f724dceaea71"
+      "sha256": "eaf7a3ad706519c9220d487b68b0cf0e6bd4aeea0fcb3d34e903ab40a52b83a7"
     },
     "class_distribution_plot": {
       "path": "docs/results/class_distribution.png",
@@ -14,23 +14,23 @@
     },
     "confusion_matrix_plot": {
       "path": "docs/results/confusion_matrix.png",
-      "sha256": "9be1a32817cebb77de002b1836303c6224d6fe0275c47fa6060105dcd501db6d"
+      "sha256": "84f5a2d60cc0896eb44331e6168fa5ef818629ad15c0288bb4730f405961c921"
     },
     "confusion_matrix_table": {
       "path": "docs/results/confusion_matrix.csv",
-      "sha256": "2f5cf321f0f0b7927dfed989a7b8a96bbc13604f6b3d180ea54e3d7de430710e"
+      "sha256": "39c00d4a229cfd917667d44b67b4d91217bc69394e05b3800831826e25583097"
     },
     "feature_importance": {
       "path": "docs/results/feature_importance.csv",
-      "sha256": "53cc18a964e9420a126f68b5aeba1325d8da53a0e632ab41b0f250af125bf48d"
+      "sha256": "abd245ae1b61834f0079a9181488d45368938feb8fc09f1a6acb8296ead6b303"
     },
     "feature_importance_folds": {
       "path": "docs/results/feature_importance_folds.csv",
-      "sha256": "b86bec5b95580ced7b3cced9e73bfa7f18c106e1f8d6158d3db65802ed1a6502"
+      "sha256": "41751e395cd3b7d243e78d71869e733054a9eae099d1201ea2c038aa09184c99"
     },
     "feature_importance_plot": {
       "path": "docs/results/feature_importance.png",
-      "sha256": "a897b6e820063be30d7aa4b7c218a4eca402fd766b6fd2397292e1b068c2f96a"
+      "sha256": "b929d667c862fdf3b522ba6866ebd14494ea9295f2669911c17f50b2cf89ce4a"
     },
     "feature_order": {
       "path": "models/features.pkl",
@@ -38,31 +38,31 @@
     },
     "model_comparison": {
       "path": "docs/results/model_comparison.csv",
-      "sha256": "815d08ae86b1de249c0895f9a34beed16dec78251805b04f25484c6057877ad9"
+      "sha256": "c65064bede5d8a45f16b04e933b5ca8db82724c85359a926d961070305cbd123"
     },
     "model_comparison_plot": {
       "path": "docs/results/model_comparison.png",
-      "sha256": "f53fd7a371cdbf19a0c2755f6e22774544e906f7a4a70bdb353b81a32ea6b694"
+      "sha256": "2f334729624e29d966de8d9dbbea412e96334c897ed9d4466bd78aedcb7ed8c7"
     },
     "per_fold_metrics": {
       "path": "docs/results/model_fold_metrics.csv",
-      "sha256": "639b3c7a131e3a27060678cceb0c4a0061c71bcf2bc613e042bf583c408cf49d"
+      "sha256": "122d4af62aea851a4f4bc9dd00958a9c637e06a7973c32b56f9678f2e7e7b215"
     },
     "probability_calibration_plot": {
       "path": "docs/results/probability_calibration.png",
-      "sha256": "fa4af835c8136c695e53ac2e0c6eb0793db3d3c461ed5248207e62fcb4d09c30"
+      "sha256": "e7829ca284a5908b81dceacc26aa9aafa41a364a09f35ecff9c3c89d07370d0c"
     },
     "selected_model": {
       "path": "models/oa_model.pkl",
-      "sha256": "7228bb1d7b0b1195533edb2d3252745963b7e0f95f908f23b6de050f06b24226"
+      "sha256": "1ebc39ceafa1ce74048a4141b1c77eba1628b9355b2c12cb84a37cad1f6deecf"
     },
     "selected_model_oof_predictions": {
       "path": "docs/results/selected_model_oof_predictions.csv",
-      "sha256": "0ce831f7e2183235bb296ed93750c148855ebac63533827f11b71a3545bec6f6"
+      "sha256": "4308ba932f94709b1a076421ac76f18d743fce97737730294d810e8c2f75843d"
     },
     "validation_fold_assignments": {
       "path": "docs/results/validation_fold_assignments.csv",
-      "sha256": "06209fb99229e91e95943c94234a975d29cd1828a41cab4bb476e1c58f05b246"
+      "sha256": "f032ddba580f1bcff665476856168bacd76cec2e1c20827d23487dd148312641"
     }
   },
   "candidate_models": {
@@ -219,14 +219,14 @@
     "method": "StratifiedKFold",
     "metric_standard_deviation": "sample standard deviation across five folds (ddof=1)",
     "n_splits": 5,
-    "outer_validation_subjects": "original real subjects only",
-    "outer_validation_synthetic_rows": 0,
+    "outer_validation_subjects": "all active training rows",
+    "outer_validation_synthetic_rows": 500,
     "random_seed": 42,
     "shuffle": true,
-    "synthetic_augmentation": "Within each outer fold, SMOTENC is fitted only on that fold's original training subjects and adds 250 training examples per target class."
+    "synthetic_augmentation": "None. The active table is modeled as one unified dataset; synthetic rows are included in training and validation folds exactly like observed rows."
   },
   "data": {
-    "active_dataset_sha256": "e7bd3eee8a4ba3ece001a504cb96684ab0b102cf17e808f431ffc70c05d86b39",
+    "active_dataset_sha256": "3407b61ddfeb1d4db0f20e0c819cdc6f071854214953276b1d0a3b4d563e1f9b",
     "active_training_rows": 588,
     "original_dataset_sha256": "75bd6e52bf3950c8319efa20a72affbfe381685944f092530e10644e6813ca27",
     "original_observed_subjects": 88,
@@ -240,7 +240,7 @@
     },
     "synthetic_training_examples": 500
   },
-  "evidence_statement": "The reported validation metrics are internal cross-validation results from 88 observed subjects. The 500 SMOTENC rows are synthetic training examples, never independent validation subjects, and do not constitute additional clinical evidence. No external clinical validation has been performed.",
+  "evidence_statement": "The reported validation metrics are internal cross-validation results from the 588-row active dataset, including 88 observed rows and 500 generated rows. Synthetic provenance is retained for transparency, but synthetic rows are modeled as part of the unified dataset. No external clinical validation has been performed.",
   "feature_configuration": {
     "features": [
       "age",
@@ -264,75 +264,75 @@
   ],
   "final_training": {
     "model_variant": "uncalibrated",
-    "note": "The final estimator is fitted on the active dataset after model selection. Synthetic rows remain training examples rather than independent evidence.",
+    "note": "The final estimator is fitted on the unified active dataset after model selection, with observed and synthetic rows treated identically by the model.",
     "real_training_rows": 88,
     "synthetic_training_rows": 500,
     "total_training_rows": 588
   },
   "model_selection": {
-    "criterion": "highest mean F1 across the five outer real-subject validation folds",
-    "selected_f1_standard_deviation": 0.04876334141493302,
-    "selected_mean_f1": 0.7273327704287456,
-    "selected_model": "Logistic Regression"
+    "criterion": "highest mean F1 across the five outer unified active-data validation folds",
+    "selected_f1_standard_deviation": 0.016276606612143845,
+    "selected_mean_f1": 0.8882061871818113,
+    "selected_model": "KNN"
   },
   "permutation_importance": {
-    "evaluated_on": "each outer fold's untouched original real validation subjects",
+    "evaluated_on": "each outer fold's untouched active validation rows",
     "repeats_per_fold": 30,
     "scoring": "F1",
-    "synthetic_validation_rows": 0
+    "synthetic_validation_rows": 500
   },
   "probability_calibration": {
-    "adoption_rule": "Apply only if real-subject out-of-fold Brier score and log loss both improve without reducing out-of-fold F1.",
+    "adoption_rule": "Apply only if unified active-data out-of-fold Brier score and log loss both improve without reducing out-of-fold F1.",
     "applied_to_saved_model": false,
     "calibration_fraction_of_each_outer_training_partition": 0.2,
-    "calibration_rows": "original real subjects drawn only from the outer training partition",
-    "calibration_synthetic_rows": 0,
+    "calibration_rows": "active rows drawn from the outer training partition",
+    "calibration_synthetic_rows": "included in the active-row calibration split",
     "comparison": [
       {
-        "Accuracy Mean": 0.7163398692810458,
-        "Accuracy Std": 0.06860410433879788,
-        "Brier Score Mean": 0.20935549833168485,
-        "Brier Score Std": 0.03611381101428281,
-        "F1 Mean": 0.7273327704287456,
-        "F1 Std": 0.04876334141493302,
-        "Log Loss Mean": 0.6500533995717733,
-        "Log Loss Std": 0.10491540367731025,
-        "OOF Accuracy": 0.7159090909090909,
-        "OOF Brier Score": 0.20919829293350964,
-        "OOF F1": 0.7252747252747253,
-        "OOF Log Loss": 0.6490567526676417,
-        "OOF Precision": 0.6875,
-        "OOF Recall": 0.7674418604651163,
-        "Precision Mean": 0.7045054945054945,
-        "Precision Std": 0.10518096721951962,
-        "Recall Mean": 0.7666666666666666,
-        "Recall Std": 0.08002700161604406,
+        "Accuracy Mean": 0.8894828335506302,
+        "Accuracy Std": 0.01675562233372292,
+        "Brier Score Mean": 0.08481297986382734,
+        "Brier Score Std": 0.009126242647671914,
+        "F1 Mean": 0.8882061871818113,
+        "F1 Std": 0.016276606612143845,
+        "Log Loss Mean": 1.2651002569569356,
+        "Log Loss Std": 0.3948042565201568,
+        "OOF Accuracy": 0.8894557823129252,
+        "OOF Brier Score": 0.08482993197278912,
+        "OOF F1": 0.8881239242685026,
+        "OOF Log Loss": 1.2652216267050256,
+        "OOF Precision": 0.8958333333333334,
+        "OOF Recall": 0.8805460750853242,
+        "Precision Mean": 0.8963888867804707,
+        "Precision Std": 0.024371172239316202,
+        "Recall Mean": 0.8805961426066627,
+        "Recall Std": 0.020667272032556798,
         "Variant": "Uncalibrated"
       },
       {
-        "Accuracy Mean": 0.681045751633987,
-        "Accuracy Std": 0.0566312619795587,
-        "Brier Score Mean": 0.20446603532479415,
-        "Brier Score Std": 0.014630628714074556,
-        "F1 Mean": 0.6516218147177899,
-        "F1 Std": 0.08021588206652923,
-        "Log Loss Mean": 0.6003862764496051,
-        "Log Loss Std": 0.03440684318105156,
-        "OOF Accuracy": 0.6818181818181818,
-        "OOF Brier Score": 0.2045324570923108,
-        "OOF F1": 0.6585365853658537,
-        "OOF Log Loss": 0.6003335968437822,
-        "OOF Precision": 0.6923076923076923,
-        "OOF Recall": 0.627906976744186,
-        "Precision Mean": 0.6976190476190475,
-        "Precision Std": 0.08676603408708859,
-        "Recall Mean": 0.6222222222222222,
-        "Recall Std": 0.12044157438154889,
+        "Accuracy Mean": 0.8860785165869911,
+        "Accuracy Std": 0.015222621162849797,
+        "Brier Score Mean": 0.08499774255735322,
+        "Brier Score Std": 0.008877118681852116,
+        "F1 Mean": 0.8837246569108193,
+        "F1 Std": 0.016831356541613256,
+        "Log Loss Mean": 0.2909846651640621,
+        "Log Loss Std": 0.021247944370871522,
+        "OOF Accuracy": 0.8860544217687075,
+        "OOF Brier Score": 0.08500550444231833,
+        "OOF F1": 0.8838821490467937,
+        "OOF Log Loss": 0.2909988223541964,
+        "OOF Precision": 0.897887323943662,
+        "OOF Recall": 0.8703071672354948,
+        "Precision Mean": 0.8982180114967001,
+        "Precision Std": 0.016573087225143005,
+        "Recall Mean": 0.8704850964348335,
+        "Recall Std": 0.03476540688970945,
         "Variant": "Calibrated"
       }
     ],
     "method_evaluated": "sigmoid",
-    "outer_evaluation_rows": "untouched original real subjects",
+    "outer_evaluation_rows": "untouched active rows",
     "selected_variant": "Uncalibrated"
   },
   "random_seed": 42,

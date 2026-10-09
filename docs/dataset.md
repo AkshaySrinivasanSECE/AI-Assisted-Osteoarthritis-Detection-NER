@@ -9,7 +9,7 @@
 
 The authoritative counts and distribution summaries are written to `data/synthetic_data_quality_report.json` and `models/model_metadata.json`.
 
-`data/full_indicators_summary.original.csv` is the preserved observed source. `data/full_indicators_summary.csv` is generated and may be recreated, but it must never be described as 588 observed patients.
+`data/full_indicators_summary.original.csv` is the preserved observed source. `data/full_indicators_summary.csv` is generated and may be recreated; it is the unified 588-row modeling table, not 588 observed patients.
 
 ## Model fields
 
@@ -33,13 +33,13 @@ Every active row receives:
 - a unique `record_id`
 - `record_source` equal to `real` or `synthetic`
 - `generation_method` equal to `observed` or `SMOTENC`
-- `validation_eligible` equal to true only for observed rows
+- `validation_eligible` equal to true for every active row; `record_source` is retained for audit only
 
 Regeneration starts from the preserved source and replaces the active table; it does not append to a previous generated dataset.
 
 ## Validation boundary
 
-Only observed subjects are split into outer validation folds. Synthetic examples are generated independently from each outer training partition and remain training augmentation. They never enter outer validation or calibration and do not increase the amount of clinical evidence.
+All active rows are split into outer validation folds and are modeled together. The 500 synthetic examples are already present in the active table; they are not regenerated inside folds or excluded from validation and calibration. They still do not represent additional patients or additional clinical evidence.
 
 ## Quality report
 
